@@ -7,29 +7,23 @@ var async = require('async');
 
 exports.index = function(req, res) {   
     console.log("async start")
-    async.series({
+    async.parallel({
         book_count: function(callback) {
             Book.count(callback);
-            console.log("book start")
         },
         book_instance_count: function(callback) {
             BookInstance.count(callback);
-            console.log("instance start")
         },
         book_instance_available_count: function(callback) {
             BookInstance.count({status:'Available'}, callback);
-            console.log("available start")
         },
         author_count: function(callback) {
             Author.count(callback);
-            console.log("author start")
         },
         genre_count: function(callback) {
             Genre.count(callback);
-            console.log("genre start")
         },
     }, function(err, results) {
-        console.log("render start")
         res.render('index', { title: 'Local Library Home', error: err, data: results });
     });
 };
