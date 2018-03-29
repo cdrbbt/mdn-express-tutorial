@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var moment = require('moment');
 
 var Schema = mongoose.Schema;
 
@@ -25,5 +26,14 @@ AuthorSchema
         return '/catalog/author/' + this._id;
     });
 
+AuthorSchema
+    .virtual('lifespan')
+    .get(function () {
+        if (this.date_of_birth) {
+            return (moment(this.date_of_birth).format('MMMM Do, YYYY') + ' - ' + moment(this.date_of_death).format('MMMM Do, YYYY'));
+        } else {
+            return null;
+        }
+    });
 //Export model
 module.exports = mongoose.model('Author', AuthorSchema);
